@@ -52,7 +52,8 @@
   .kpi-note { font-size: 0.68rem; color: var(--ink-faint); }
   .kpi-verified { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; background: #eaf3de; color: #27500a; font-size: 0.6rem; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
   .kpi-verified::before { content: "✓"; font-weight: 700; }
-  .kpi-school-note { display: inline-block; margin-top: 6px; font-size: 0.62rem; color: #854f0b; background: #fdf4e2; border: 1px solid #e0b86a; border-radius: 5px; padding: 3px 8px; }
+  .kpi-school-note { display: inline-block; margin-top: 6px; font-size: 0.62rem; color: #854f0b; background: #fdf4e2; border: 1px solid #e0b86a; border-radius: 5px; padding: 3px 8px; text-decoration: none; transition: background 0.15s; }
+  .kpi-school-note:hover { background: #f5e4b8; }
 
   .focus-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 0.75rem; }
   .focus-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 1rem 0.85rem; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
@@ -77,7 +78,8 @@
   .metric-fill { height: 100%; border-radius: 3px; background: var(--navy); }
   .metric-val { font-size: 0.75rem; font-weight: 600; color: var(--ink); min-width: 80px; text-align: right; }
   .metric-val.tbd { color: var(--ink-faint); font-style: italic; font-weight: 400; }
-  .metric-school-tag { font-size: 0.6rem; color: #854f0b; background: #fdf4e2; border: 1px solid #e0b86a; border-radius: 4px; padding: 1px 6px; margin-left: 4px; white-space: nowrap; }
+  .metric-school-tag { font-size: 0.6rem; color: #854f0b; background: #fdf4e2; border: 1px solid #e0b86a; border-radius: 4px; padding: 1px 6px; margin-left: 4px; white-space: nowrap; text-decoration: none; }
+  .metric-school-tag:hover { background: #f5e4b8; }
 
   .collecting-box { background: var(--gold-pale); border: 1.5px solid #e0b86a; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
   .collecting-box h3 { font-size: 0.75rem; font-weight: 600; color: #633806; margin-bottom: 0.85rem; }
@@ -200,7 +202,8 @@ const METRICS = {
       value: 1,
       label: "School renovated",
       note:  "Akoore Secondary School &middot; 2026",
-      schoolNote: "Akoore Secondary School"
+      schoolNote: "Akoore Secondary School",
+      schoolLink: "https://www.akooreschool.org/"
     },
   ],
 
@@ -235,9 +238,9 @@ const METRICS = {
       icon: "🏗️",
       name: "Infrastructure",
       status: "active",
-      desc: "Building and rehabilitating safe, modern classrooms and learning spaces. Spora is currently supporting the renovation of Akoore Secondary School in Nigeria. Investing in clean water systems and sanitation facilities that support inclusive learning environments.",
+      desc: "Building and rehabilitating safe, modern classrooms and learning spaces. Spora is currently supporting the renovation of <a href=\"https://www.akooreschool.org/\" target=\"_blank\" style=\"color:var(--navy-mid);font-weight:500;\">Akoore Secondary School ↗</a> in Nigeria. Investing in clean water systems and sanitation facilities that support inclusive learning environments.",
       metrics: [
-        { name: "Schools renovated",          value: 1,    display: "1 &mdash; Akoore Secondary", verified: true,  schoolTag: true },
+        { name: "Schools renovated",          value: 1,    display: "1 &mdash; Akoore Secondary", verified: true,  schoolTag: true, schoolLink: "https://www.akooreschool.org/" },
         { name: "Desks &amp; furniture",      value: null, display: "Collecting", verified: false },
         { name: "Latrines installed",         value: null, display: "Collecting", verified: false },
         { name: "Clean water points",         value: null, display: "Collecting", verified: false },
@@ -294,7 +297,7 @@ METRICS.verified.forEach((m, i) => {
     <div class="kpi-num" data-target="${m.value}" id="kn${i}">0</div>
     <div class="kpi-label">${m.label}</div>
     <div class="kpi-note">${m.note}</div>
-    ${m.schoolNote ? `<span class="kpi-school-note">🏫 ${m.schoolNote}</span>` : ''}
+    ${m.schoolNote ? `<a href="${m.schoolLink}" target="_blank" class="kpi-school-note">🏫 ${m.schoolNote} ↗</a>` : ''}
     <span class="kpi-verified">Verified &middot; sporanetwork.org</span>
   `;
   kpiRow.appendChild(card);
@@ -328,7 +331,7 @@ function showDetail(i) {
   const maxVal = verifiedVals.length ? Math.max(...verifiedVals, 1) : 1;
   const rows = f.metrics.map(m => {
     const pct = m.verified ? Math.min(Math.round((m.value / maxVal) * 100), 100) : 0;
-    const schoolTag = m.schoolTag ? `<span class="metric-school-tag">Akoore Secondary</span>` : '';
+    const schoolTag = m.schoolTag ? `<a href="${m.schoolLink}" target="_blank" class="metric-school-tag">Akoore Secondary ↗</a>` : '';
     return `
       <div class="metric-row">
         <span class="metric-name">${m.name}</span>
