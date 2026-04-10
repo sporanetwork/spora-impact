@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spora Network — Impact Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --forest: #1b3d2a;
+    --forest-mid: #2c5f42;
+    --forest-light: #52b788;
+    --gold: #c8973a;
+    --gold-pale: #fdf4e2;
+    --navy: #08306b;
+    --navy-mid: #2166ac;
+    --navy-light: #4393c3;
+    --navy-pale: #e8f2fb;
+    --ink: #1a1a1a;
+    --ink-mid: #444;
+    --ink-soft: #666;
+    --ink-faint: #999;
+    --surface: #fff;
+    --cream: #faf9f5;
+    --cream-mid: #f0ede3;
+    --border: #d8d4c8;
+    --border-light: #e8e4d8;
+  }
+
+  body {
+    font-family: "Inter", sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .topbar {
+    background: var(--forest);
+    padding: 0 2.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 17px; font-weight: 700; color: var(--forest);
+  }
+  .brand-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.2rem; font-weight: 700; color: #fff; line-height: 1.1;
+  }
+  .brand-sub {
+    font-size: 0.6rem; color: rgba(255,255,255,0.35);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-top: 1px;
+  }
+  .topbar-right {
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .topbar-tag {
+    font-size: 0.62rem; color: rgba(255,255,255,0.28); font-style: italic;
+  }
+  .mel-badge {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 4px; padding: 3px 9px;
+    font-size: 0.6rem; color: rgba(255,255,255,0.4);
+    letter-spacing: 0.09em; text-transform: uppercase;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+
+  /* ── SECTION LABELS ── */
+  .sec-label {
+    font-size: 0.62rem; font-weight: 600; color: var(--ink-faint);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.85rem;
+  }
+
+  /* ── VERIFIED KPIs ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-top: 3px solid var(--navy);
+    border-radius: 10px;
+    padding: 1.25rem 1.25rem 1rem;
+  }
+  .kpi-num {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 3rem; font-weight: 700;
+    color: var(--navy); line-height: 1;
+    margin-bottom: 6px;
+  }
+  .kpi-label {
+    font-size: 0.8rem; font-weight: 500;
+    color: var(--ink-mid); line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .kpi-note { font-size: 0.68rem; color: var(--ink-faint); }
+  .kpi-verified {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 8px;
+    background: #eaf3de; color: #27500a;
+    font-size: 0.6rem; font-weight: 600;
+    padding: 3px 8px; border-radius: 20px;
+  }
+  .kpi-verified::before {
+    content: "✓"; font-weight: 700;
+  }
+
+  /* ── FOCUS AREA CARDS ── */
+  .focus-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 0.75rem;
+  }
+  .focus-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .focus-card:hover { border-color: var(--navy-light); background: var(--navy-pale); }
+  .focus-card.active {
+    border: 2px solid var(--navy);
+    background: var(--navy-pale);
+  }
+  .focus-icon { font-size: 1.3rem; margin-bottom: 8px; display: block; }
+  .focus-name { font-size: 0.72rem; font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 5px; }
+  .focus-status { display: flex; align-items: center; gap: 4px; font-size: 0.62rem; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-active { background: #639922; }
+  .dot-collecting { background: #c8973a; }
+  .status-label-active { color: #3b6d11; }
+  .status-label-collecting { color: #854f0b; }
+
+  /* ── DETAIL PANEL ── */
+  .detail-panel {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-left: 4px solid var(--navy);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .detail-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.2rem; font-weight: 700; color: var(--navy);
+    margin-bottom: 5px;
+  }
+  .detail-desc {
+    font-size: 0.78rem; color: var(--ink-soft);
+    line-height: 1.65; margin-bottom: 1.1rem;
+  }
+  .metric-list { display: flex; flex-direction: column; gap: 9px; }
+  .metric-row { display: flex; align-items: center; gap: 10px; }
+  .metric-name { font-size: 0.75rem; color: var(--ink-soft); flex: 1; }
+  .metric-track {
+    width: 110px; height: 5px;
+    background: var(--cream-mid);
+    border-radius: 3px; overflow: hidden; flex-shrink: 0;
+  }
+  .metric-fill { height: 100%; border-radius: 3px; background: var(--navy); }
+  .metric-val { font-size: 0.75rem; font-weight: 600; color: var(--ink); min-width: 80px; text-align: right; }
+  .metric-val.tbd { color: var(--ink-faint); font-style: italic; font-weight: 400; }
+
+  /* ── COLLECTING BOX ── */
+  .collecting-box {
+    background: var(--gold-pale);
+    border: 1.5px solid #e0b86a;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .collecting-box h3 {
+    font-size: 0.75rem; font-weight: 600; color: #633806;
+    margin-bottom: 0.85rem;
+  }
+  .collecting-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .collecting-item {
+    background: rgba(255,255,255,0.65);
+    border: 1px solid rgba(200,151,58,0.25);
+    border-radius: 7px;
+    padding: 9px 11px;
+  }
+  .collecting-item-name { font-size: 0.72rem; font-weight: 500; color: #412402; margin-bottom: 2px; }
+  .collecting-item-note { font-size: 0.65rem; color: #854f0b; }
+
+  /* ── EXPANSION SECTION ── */
+  .expansion-box {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+  }
+  .expansion-intro {
+    font-size: 0.78rem; color: var(--ink-soft);
+    line-height: 1.65; margin-bottom: 1rem;
+  }
+  .country-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 1rem; }
+  .cpill {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.7rem; color: var(--ink-soft);
+    cursor: default;
+  }
+  .cpill.ng {
+    background: var(--navy-pale);
+    border-color: var(--navy-light);
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  /* ── SOURCE FOOTER ── */
+  .source-bar {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+    font-size: 0.65rem; color: var(--ink-faint);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .source-bar a { color: var(--navy-mid); text-decoration: none; }
+
+  @media (max-width: 700px) {
+    .kpi-row { grid-template-columns: 1fr; }
+    .focus-row { grid-template-columns: repeat(3, 1fr); }
+    .collecting-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">S</div>
+    <div>
+      <div class="brand-name">Spora Network</div>
+      <div class="brand-sub">Impact Dashboard &middot; 2026</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-tag">Nigeria active program &middot; Continental expansion vision</span>
+    <span class="mel-badge">MEL Framework</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ── VERIFIED OUTCOMES ── -->
+  <div class="sec-label">2026 Verified Outcomes &mdash; Nigeria</div>
+  <div class="kpi-row" id="kpi-row">
+    <!-- KPI cards injected by JS from METRICS object below -->
+  </div>
+
+  <!-- ── FOCUS AREAS ── -->
+  <div class="sec-label">5 Focus Areas &mdash; click to explore each program</div>
+  <div class="focus-row" id="focus-row"></div>
+
+  <!-- ── DETAIL PANEL ── -->
+  <div class="detail-panel" id="detail-panel"></div>
+
+  <!-- ── COLLECTING NEXT ── -->
+  <div class="collecting-box">
+    <h3>Collecting next &mdash; Q4 2026 verified update</h3>
+    <div class="collecting-grid" id="collecting-grid">
+      <!-- injected from METRICS.collecting -->
+    </div>
+  </div>
+
+  <!-- ── EXPANSION ── -->
+  <div class="expansion-box">
+    <div class="sec-label">Continental expansion vision</div>
+    <p class="expansion-intro">
+      Spora Network's goal is to bring diaspora-led education programs to every country in Africa.
+      Nigeria is the first active program. All 55 other countries are part of the future expansion vision.
+    </p>
+    <div class="country-pills">
+      <span class="cpill ng">Nigeria &mdash; active 2026</span>
+      <span class="cpill">Ghana</span><span class="cpill">Kenya</span>
+      <span class="cpill">Ethiopia</span><span class="cpill">Tanzania</span>
+      <span class="cpill">South Africa</span><span class="cpill">Senegal</span>
+      <span class="cpill">Uganda</span><span class="cpill">Rwanda</span>
+      <span class="cpill">Cameroon</span><span class="cpill">Ivory Coast</span>
+      <span class="cpill">Ghana</span><span class="cpill">Malawi</span>
+      <span class="cpill">Zambia</span><span class="cpill">Zimbabwe</span>
+      <span class="cpill" style="color:var(--ink-faint);">+ 41 more countries</span>
+    </div>
+  </div>
+
+  <div class="source-bar">
+    <span>All data sourced from <a href="https://www.sporanetwork.org/impact-and-learning" target="_blank">sporanetwork.org/impact-and-learning</a> &middot; Updated April 2026 &middot; 501(c)(3) Nonprofit</span>
+    <span>Diaspora-led &middot; Community-driven &middot; Africa-focused</span>
+  </div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   METRICS — UPDATE THIS SECTION TO REFRESH THE DASHBOARD
+   =========================================================
+
+   HOW TO UPDATE:
+   1. Open this file in any text editor (VS Code, Notepad, etc.)
+   2. Find this METRICS block (search for "METRICS =")
+   3. Change the numbers in the "verified" array
+   4. Add new items to "collecting" once data is ready:
+        - Change status from "collecting" to "verified"
+        - Fill in the actual number in "value"
+   5. Save the file and push to GitHub — the page updates live
+
+   ADDING A NEW VERIFIED METRIC EXAMPLE:
+   Change this:
+     { name: "Schools renovated", value: null, status: "collecting", note: "Q4 2026" }
+   To this:
+     { name: "Schools renovated", value: 3, status: "verified", note: "2026" }
+   ========================================================= */
+
+const METRICS = {
+
+  /* --- VERIFIED NUMBERS (from sporanetwork.org) --- */
+  verified: [
+    { value: 250, label: "Students' tuition funded",        note: "1st semester 2026 school year" },
+    { value: 2,   label: "Desktops deployed to library",    note: "School library &middot; 2026"  },
+    { value: 1,   label: "CS teacher placed",               note: "Primary &amp; secondary &middot; 2026" },
+  ],
+
+  /* --- FOCUS AREAS --- */
+  focuses: [
+    {
+      icon: "📚",
+      name: "Education access",
+      status: "active",
+      desc: "Expanding opportunities for children &mdash; especially girls and marginalized youth &mdash; to attend and stay in school. Removing barriers like school fees, distance, and lack of resources.",
+      metrics: [
+        { name: "Students' tuition funded",  value: 250, display: "250",          verified: true  },
+        { name: "Scholarships awarded",      value: null, display: "Collecting",  verified: false },
+        { name: "Enrollment equity data",    value: null, display: "Collecting",  verified: false },
+      ]
+    },
+    {
+      icon: "💡",
+      name: "Digital learning",
+      status: "active",
+      desc: "Equipping schools with technology, internet access, and digital literacy. Preparing learners for the future economy through access to digital tools and e-learning platforms.",
+      metrics: [
+        { name: "Desktops deployed",      value: 2,    display: "2",           verified: true  },
+        { name: "CS teacher placed",      value: 1,    display: "1",           verified: true  },
+        { name: "Laptops distributed",    value: null, display: "Collecting",  verified: false },
+        { name: "E-learning access",      value: null, display: "Collecting",  verified: false },
+      ]
+    },
+    {
+      icon: "🏗️",
+      name: "Infrastructure",
+      status: "collecting",
+      desc: "Building and rehabilitating safe, modern classrooms and learning spaces. Investing in clean water systems and sanitation facilities that support inclusive learning environments.",
+      metrics: [
+        { name: "Schools built / renovated",  value: null, display: "Collecting Q4 2026", verified: false },
+        { name: "Latrines installed",         value: null, display: "Collecting Q4 2026", verified: false },
+        { name: "Clean water points",         value: null, display: "Collecting Q4 2026", verified: false },
+      ]
+    },
+    {
+      icon: "⚡",
+      name: "Gender equality",
+      status: "collecting",
+      desc: "Empowering girls by providing hygiene products and disability tools. Building inclusive learning environments so every child can succeed regardless of gender or ability.",
+      metrics: [
+        { name: "Hygiene kits distributed",  value: null, display: "Collecting Q4 2026", verified: false },
+        { name: "Disability tools provided", value: null, display: "Collecting Q4 2026", verified: false },
+        { name: "Girls' enrollment rate",    value: null, display: "Collecting Q4 2026", verified: false },
+      ]
+    },
+    {
+      icon: "🌱",
+      name: "Community",
+      status: "collecting",
+      desc: "Promoting local ownership and resilience through programs that improve livelihoods, access to clean water, and environmental sustainability. Every initiative is community-driven and built to last.",
+      metrics: [
+        { name: "Teachers trained",           value: null, display: "Collecting Q4 2026", verified: false },
+        { name: "Community partners",         value: null, display: "Collecting Q4 2026", verified: false },
+        { name: "Local ownership programs",   value: null, display: "Collecting Q4 2026", verified: false },
+      ]
+    }
+  ],
+
+  /* --- COLLECTING NEXT --- */
+  collecting: [
+    { name: "Schools built / renovated",  note: "Data collection in progress" },
+    { name: "Latrines installed",         note: "Data collection in progress" },
+    { name: "Clean water access points",  note: "Data collection in progress" },
+    { name: "Teachers trained",           note: "Data collection in progress" },
+    { name: "Scholarships awarded",       note: "Data collection in progress" },
+    { name: "Gender equity enrollment",   note: "Data collection in progress" },
+  ]
+
+};
+
+/* =========================================================
+   RENDER — no need to edit below this line
+   ========================================================= */
+
+// KPI cards
+const kpiRow = document.getElementById('kpi-row');
+METRICS.verified.forEach((m, i) => {
+  const card = document.createElement('div');
+  card.className = 'kpi-card';
+  card.innerHTML = `
+    <div class="kpi-num" data-target="${m.value}" id="kn${i}">0</div>
+    <div class="kpi-label">${m.label}</div>
+    <div class="kpi-note">${m.note}</div>
+    <span class="kpi-verified">Verified &middot; sporanetwork.org</span>
+  `;
+  kpiRow.appendChild(card);
+});
+
+// Focus cards
+const focusRow = document.getElementById('focus-row');
+let activeIdx = 0;
+METRICS.focuses.forEach((f, i) => {
+  const card = document.createElement('div');
+  card.className = 'focus-card' + (i === 0 ? ' active' : '');
+  const isActive = f.status === 'active';
+  card.innerHTML = `
+    <span class="focus-icon">${f.icon}</span>
+    <div class="focus-name">${f.name}</div>
+    <div class="focus-status">
+      <span class="status-dot ${isActive ? 'dot-active' : 'dot-collecting'}"></span>
+      <span class="${isActive ? 'status-label-active' : 'status-label-collecting'}">
+        ${isActive ? 'Active' : 'Collecting'}
+      </span>
+    </div>
+  `;
+  card.addEventListener('click', () => showDetail(i));
+  focusRow.appendChild(card);
+});
+
+// Detail panel
+function showDetail(i) {
+  activeIdx = i;
+  document.querySelectorAll('.focus-card').forEach((c, j) => {
+    c.classList.toggle('active', j === i);
+  });
+  const f = METRICS.focuses[i];
+  const maxVal = Math.max(...f.metrics.map(m => m.value || 0), 1);
+  const rows = f.metrics.map(m => {
+    const pct = m.verified ? Math.round((m.value / maxVal) * 100) : 0;
+    return `
+      <div class="metric-row">
+        <span class="metric-name">${m.name}</span>
+        <div class="metric-track"><div class="metric-fill" style="width:${pct}%;"></div></div>
+        <span class="metric-val ${m.verified ? '' : 'tbd'}">${m.display}</span>
+      </div>`;
+  }).join('');
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="detail-name">${f.icon} ${f.name}</div>
+    <div class="detail-desc">${f.desc}</div>
+    <div class="metric-list">${rows}</div>
+  `;
+}
+showDetail(0);
+
+// Collecting grid
+const cGrid = document.getElementById('collecting-grid');
+METRICS.collecting.forEach(c => {
+  const item = document.createElement('div');
+  item.className = 'collecting-item';
+  item.innerHTML = `<div class="collecting-item-name">${c.name}</div><div class="collecting-item-note">${c.note}</div>`;
+  cGrid.appendChild(item);
+});
+
+// Animate counters
+function animCount(el, target) {
+  let s = 0;
+  const step = ts => {
+    if (!s) s = ts;
+    const p = Math.min((ts - s) / 1000, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(e * target);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+}
+setTimeout(() => {
+  METRICS.verified.forEach((m, i) => {
+    animCount(document.getElementById(`kn${i}`), m.value);
+  });
+}, 300);
+
+</script>
+</body>
+</html>
