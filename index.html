@@ -179,9 +179,9 @@ const METRICS = {
       schoolNote: null
     },
     {
-      value: 2,
+      value: 3,
       label: "Schools renovated",
-      note:  "Akoore Primary &amp; Secondary &middot; 2026",
+      note:  "Akoore Primary &amp; Secondary, Methodist Primary Odugbe &middot; 2026",
       schoolNote: "Akoore School",
       schoolLink: "https://www.akooreschool.org/"
     },
@@ -212,6 +212,20 @@ const METRICS = {
       note:  "Biology, Chemistry &amp; Physics &middot; Akoore Secondary",
       schoolNote: "Akoore Secondary School",
       schoolLink: "https://www.akooreschool.org/"
+    },
+    {
+      value: 4,
+      label: "School bathrooms constructed",
+      note:  "Methodist Primary School, Odugbe &middot; 2026",
+      schoolNote: "Methodist Primary School, Odugbe",
+      schoolLink: null
+    },
+    {
+      value: 1,
+      label: "Portable water system installed",
+      note:  "Methodist Primary School, Odugbe &middot; 2026",
+      schoolNote: "Methodist Primary School, Odugbe",
+      schoolLink: null
     },
   ],
 
@@ -245,15 +259,16 @@ const METRICS = {
       icon: "🏗️",
       name: "Infrastructure",
       status: "active",
-      desc: "Building and rehabilitating safe, modern classrooms and learning spaces. Spora has renovated both <a href=\"https://www.akooreschool.org/\" target=\"_blank\" style=\"color:var(--navy-mid);font-weight:500;\">Akoore Primary and Secondary Schools ↗</a> in Nigeria, and sponsored a fully equipped science laboratory building with Biology, Chemistry, and Physics labs at Akoore Secondary.",
+      desc: "Building and rehabilitating safe, modern classrooms and learning spaces. Spora has renovated <a href=\"https://www.akooreschool.org/\" target=\"_blank\" style=\"color:var(--navy-mid);font-weight:500;\">Akoore Primary and Secondary Schools ↗</a> and Methodist Primary School in Odugbe, Nigeria. Investments include a fully equipped science lab building (Biology, Chemistry, Physics), 4 school bathrooms, and a portable water system at Methodist Primary.",
       metrics: [
-        { name: "Schools renovated",              value: 2,    display: "2 &mdash; Akoore Primary &amp; Secondary", verified: true,  schoolTag: true, schoolLink: "https://www.akooreschool.org/" },
-        { name: "Science labs built &amp; equipped", value: 3, display: "3 (Bio, Chem, Physics)", verified: true  },
-        { name: "Desks &amp; chairs supplied",    value: 50,   display: "50 sets",   verified: true  },
-        { name: "Water tank installed",           value: 1,    display: "1",         verified: true  },
-        { name: "Solar lighting deployed",        value: 1,    display: "1 system",  verified: true  },
-        { name: "Latrines installed",             value: null, display: "Collecting", verified: false },
-        { name: "Additional water points",        value: null, display: "Collecting", verified: false },
+        { name: "Schools renovated",                 value: 3,    display: "3 &mdash; Akoore Primary, Secondary &amp; Methodist Odugbe", verified: true,  schoolTag: true, schoolLink: "https://www.akooreschool.org/" },
+        { name: "Science labs built &amp; equipped", value: 3,    display: "3 (Bio, Chem, Physics)", verified: true  },
+        { name: "School bathrooms constructed",      value: 4,    display: "4",         verified: true  },
+        { name: "Portable water system installed",   value: 1,    display: "1",         verified: true  },
+        { name: "Desks &amp; chairs supplied",       value: 50,   display: "50 sets",   verified: true  },
+        { name: "Water tank (Akoore Secondary)",     value: 1,    display: "1",         verified: true  },
+        { name: "Solar lighting deployed",           value: 1,    display: "1 system",  verified: true  },
+        { name: "Latrines installed",                value: null, display: "Collecting", verified: false },
       ]
     },
     {
@@ -283,12 +298,12 @@ const METRICS = {
   collecting: [
     { name: "Textbooks &amp; supplies",       note: "Data collection in progress" },
     { name: "Latrines installed",             note: "Data collection in progress" },
-    { name: "Additional water access points", note: "Data collection in progress" },
     { name: "Teachers trained",               note: "Data collection in progress" },
     { name: "Scholarships awarded",           note: "Data collection in progress" },
     { name: "Gender equity enrollment",       note: "Data collection in progress" },
     { name: "Hygiene kits distributed",       note: "Data collection in progress" },
     { name: "Laptops distributed",            note: "Data collection in progress" },
+    { name: "E-learning access",              note: "Data collection in progress" },
   ]
 
 };
@@ -302,7 +317,7 @@ METRICS.verified.forEach((m, i) => {
     <div class="kpi-num" data-target="${m.value}" id="kn${i}">0</div>
     <div class="kpi-label">${m.label}</div>
     <div class="kpi-note">${m.note}</div>
-    ${m.schoolNote ? `<a href="${m.schoolLink}" target="_blank" class="kpi-school-note">🏫 ${m.schoolNote} ↗</a>` : ''}
+    ${m.schoolNote ? (m.schoolLink ? `<a href="${m.schoolLink}" target="_blank" class="kpi-school-note">🏫 ${m.schoolNote} ↗</a>` : `<span class="kpi-school-note">🏫 ${m.schoolNote}</span>`) : ''}
     <span class="kpi-verified">Verified &middot; sporanetwork.org</span>
   `;
   kpiRow.appendChild(card);
