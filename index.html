@@ -163,28 +163,8 @@
 
 <script>
 
-/* =========================================================
-   METRICS — UPDATE THIS SECTION TO REFRESH THE DASHBOARD
-   =========================================================
-
-   HOW TO UPDATE:
-   1. Open this file in any text editor (VS Code, Notepad, etc.)
-   2. Find this METRICS block (search for "METRICS =")
-   3. Change numbers in the "verified" array or focus "metrics"
-   4. To promote a collecting metric to verified:
-        - Set  verified: true
-        - Set  value: <actual number>
-        - Set  display: "<actual number>"
-   5. Save the file and push to GitHub — the page updates live
-
-   EXAMPLE — promoting "Schools renovated" from collecting to verified:
-   Change:  { name: "Schools renovated", value: null, display: "Collecting", verified: false }
-   To:      { name: "Schools renovated", value: 1,    display: "1",          verified: true  }
-   ========================================================= */
-
 const METRICS = {
 
-  /* ── VERIFIED KPI CARDS (top row) ─────────────────────── */
   verified: [
     {
       value: 250,
@@ -199,15 +179,42 @@ const METRICS = {
       schoolNote: null
     },
     {
+      value: 2,
+      label: "Schools renovated",
+      note:  "Akoore Primary &amp; Secondary &middot; 2026",
+      schoolNote: "Akoore School",
+      schoolLink: "https://www.akooreschool.org/"
+    },
+    {
+      value: 50,
+      label: "Desks &amp; chairs supplied",
+      note:  "Akoore Secondary School &middot; March 2026",
+      schoolNote: "Akoore Secondary School",
+      schoolLink: "https://www.akooreschool.org/"
+    },
+    {
       value: 1,
-      label: "School renovated",
-      note:  "Akoore Secondary School &middot; 2026",
+      label: "Portable water tank installed",
+      note:  "Akoore Secondary School &middot; March 2026",
+      schoolNote: "Akoore Secondary School",
+      schoolLink: "https://www.akooreschool.org/"
+    },
+    {
+      value: 1,
+      label: "Solar lighting system deployed",
+      note:  "Akoore Secondary School &middot; March 2026",
+      schoolNote: "Akoore Secondary School",
+      schoolLink: "https://www.akooreschool.org/"
+    },
+    {
+      value: 3,
+      label: "Science labs built &amp; equipped",
+      note:  "Biology, Chemistry &amp; Physics &middot; Akoore Secondary",
       schoolNote: "Akoore Secondary School",
       schoolLink: "https://www.akooreschool.org/"
     },
   ],
 
-  /* ── FOCUS AREAS ───────────────────────────────────────── */
   focuses: [
     {
       icon: "📚",
@@ -216,7 +223,6 @@ const METRICS = {
       desc: "Expanding opportunities for children &mdash; especially girls and marginalized youth &mdash; to attend and stay in school. Removing barriers like school fees, distance, and lack of resources.",
       metrics: [
         { name: "Students' tuition funded",   value: 250,  display: "250",       verified: true  },
-        { name: "Desks distributed",          value: null, display: "Collecting", verified: false },
         { name: "Textbooks &amp; supplies",   value: null, display: "Collecting", verified: false },
         { name: "Scholarships awarded",       value: null, display: "Collecting", verified: false },
         { name: "Enrollment equity data",     value: null, display: "Collecting", verified: false },
@@ -230,6 +236,7 @@ const METRICS = {
       metrics: [
         { name: "Desktops deployed",          value: 4,    display: "4",         verified: true  },
         { name: "CS teacher placed",          value: 1,    display: "1",         verified: true  },
+        { name: "Solar lighting deployed",    value: 1,    display: "1 system",  verified: true  },
         { name: "Laptops distributed",        value: null, display: "Collecting", verified: false },
         { name: "E-learning access",          value: null, display: "Collecting", verified: false },
       ]
@@ -238,12 +245,15 @@ const METRICS = {
       icon: "🏗️",
       name: "Infrastructure",
       status: "active",
-      desc: "Building and rehabilitating safe, modern classrooms and learning spaces. Spora is currently supporting the renovation of <a href=\"https://www.akooreschool.org/\" target=\"_blank\" style=\"color:var(--navy-mid);font-weight:500;\">Akoore Secondary School ↗</a> in Nigeria. Investing in clean water systems and sanitation facilities that support inclusive learning environments.",
+      desc: "Building and rehabilitating safe, modern classrooms and learning spaces. Spora has renovated both <a href=\"https://www.akooreschool.org/\" target=\"_blank\" style=\"color:var(--navy-mid);font-weight:500;\">Akoore Primary and Secondary Schools ↗</a> in Nigeria, and sponsored a fully equipped science laboratory building with Biology, Chemistry, and Physics labs at Akoore Secondary.",
       metrics: [
-        { name: "Schools renovated",          value: 1,    display: "1 &mdash; Akoore Secondary", verified: true,  schoolTag: true, schoolLink: "https://www.akooreschool.org/" },
-        { name: "Desks &amp; furniture",      value: null, display: "Collecting", verified: false },
-        { name: "Latrines installed",         value: null, display: "Collecting", verified: false },
-        { name: "Clean water points",         value: null, display: "Collecting", verified: false },
+        { name: "Schools renovated",              value: 2,    display: "2 &mdash; Akoore Primary &amp; Secondary", verified: true,  schoolTag: true, schoolLink: "https://www.akooreschool.org/" },
+        { name: "Science labs built &amp; equipped", value: 3, display: "3 (Bio, Chem, Physics)", verified: true  },
+        { name: "Desks &amp; chairs supplied",    value: 50,   display: "50 sets",   verified: true  },
+        { name: "Water tank installed",           value: 1,    display: "1",         verified: true  },
+        { name: "Solar lighting deployed",        value: 1,    display: "1 system",  verified: true  },
+        { name: "Latrines installed",             value: null, display: "Collecting", verified: false },
+        { name: "Additional water points",        value: null, display: "Collecting", verified: false },
       ]
     },
     {
@@ -270,25 +280,20 @@ const METRICS = {
     }
   ],
 
-  /* ── COLLECTING NEXT ───────────────────────────────────── */
   collecting: [
-    { name: "Desks &amp; school furniture",   note: "Data collection in progress" },
     { name: "Textbooks &amp; supplies",       note: "Data collection in progress" },
     { name: "Latrines installed",             note: "Data collection in progress" },
-    { name: "Clean water access points",      note: "Data collection in progress" },
+    { name: "Additional water access points", note: "Data collection in progress" },
     { name: "Teachers trained",               note: "Data collection in progress" },
     { name: "Scholarships awarded",           note: "Data collection in progress" },
     { name: "Gender equity enrollment",       note: "Data collection in progress" },
     { name: "Hygiene kits distributed",       note: "Data collection in progress" },
+    { name: "Laptops distributed",            note: "Data collection in progress" },
   ]
 
 };
 
-/* =========================================================
-   RENDER — no need to edit below this line
-   ========================================================= */
-
-// KPI cards
+// KPI cards — 3-column grid per row
 const kpiRow = document.getElementById('kpi-row');
 METRICS.verified.forEach((m, i) => {
   const card = document.createElement('div');
@@ -331,7 +336,7 @@ function showDetail(i) {
   const maxVal = verifiedVals.length ? Math.max(...verifiedVals, 1) : 1;
   const rows = f.metrics.map(m => {
     const pct = m.verified ? Math.min(Math.round((m.value / maxVal) * 100), 100) : 0;
-    const schoolTag = m.schoolTag ? `<a href="${m.schoolLink}" target="_blank" class="metric-school-tag">Akoore Secondary ↗</a>` : '';
+    const schoolTag = m.schoolTag ? `<a href="${m.schoolLink}" target="_blank" class="metric-school-tag">Akoore Schools ↗</a>` : '';
     return `
       <div class="metric-row">
         <span class="metric-name">${m.name}</span>
